@@ -24,7 +24,7 @@ public class CalculatorImplAcceptanceTest {
 
     @Test
     public void arithmeticOperationEvaluatesCorrectlyWithNumericOperands(){
-        assertThat(calculator.calculate("add(1,a)")).isEqualTo(3);
+        assertThat(calculator.calculate("add(1,2)")).isEqualTo(3);
     }
 
     @Test
