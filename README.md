@@ -37,7 +37,7 @@ Logging has been implemented using the following levels:
 By default a console logger has been supplied.  Feel free to add/modify your own in the properties file.
 
 #### Dynamically
-* 'calc `<expression>` -l `<logging level>`
+* calc `<expression>` -l `<logging level>`
 
 #### Change Log4J Properties File
 * A Log4J properties file has been supplied with defaults in /src/main/resource
