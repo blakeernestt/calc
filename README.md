@@ -34,6 +34,7 @@ Logging has been implemented using the following levels:
 * ERROR
 * INFO
 * DEBUG
+
 By default a console logger has been supplied.  Feel free to add/modify your own in the properties file.
 
 #### Dynamically
