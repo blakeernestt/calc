@@ -1,6 +1,9 @@
 # Expression Calculator
 This project provides a simple calculator, written in Java, that evaluates it's own expression language.  See below for examples of usage.
 
+## Prerequisites:
+* Requires Java 8 or greater
+
 ## Usage:
 The calculator is a command line tool built using Gradle.  Resolved expressions are output to the console and logging levels can be manipulated at runtime.  See below for how to invoke:
 
@@ -13,7 +16,7 @@ The calculator is a command line tool built using Gradle.  Resolved expressions 
 * There will be a shell script and batch file to select from
 
 ### Calculator Execution:
-* calc <expression\>
+* calc `<expression>`
 
 #### Sample Calculator Expressions
 |Input|Output|
@@ -25,9 +28,13 @@ The calculator is a command line tool built using Gradle.  Resolved expressions 
 |let(a, 5, let(b, mult(a, 10), add(b, a)))|55|
 |let(a, let(b, 10, add(b, b)), let(b, 20, add(a, b)))|40|
 
-#### Rules/Limitations
-
 #### Assumptions
+* Logs are being appended to the console by default for the intended audience.  Under normal circumstances exceptions shouldn't be visible to the end user.
+* The calculator was requested to evaluate "let(a, let(b, 10, add(b, b)), let(b, 20, add(a, b))" as correct input.  A right parentheses is missing.  Adding the missing parentheses correctly evaluates to 40.
+* As only whole numbers are supported as input the evaluated expression is assumed to only support whole numbers as well.  i.e. If the result contains a remainder it will be discarded.
+* All expressions, variable names, and functions names are case insensitive.
+* SLF4J was used in favour of abstracting the underlying logging framework. On that note Log4J is included as a compile time dependency only to support dynamically changing the log level at runtime.
+
 
 ### Logging
 Logging has been implemented using the following levels:
@@ -41,4 +48,4 @@ By default a console logger has been supplied.  Feel free to add/modify your own
 * calc `<expression>` -l `<logging level>`
 
 #### Change Log4J Properties File
-* A Log4J properties file has been supplied with defaults in /src/main/resource
+* A Log4J properties file has been supplied with defaults in /src/main/resources

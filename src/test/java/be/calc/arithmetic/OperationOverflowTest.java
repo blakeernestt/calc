@@ -11,7 +11,7 @@ public class OperationOverflowTest {
 
     @Test
     public void addThrowsArithmeticExceptionOnOverflow(){
-        Operation operation = new AddOperation(new NumericOperand(Integer.MAX_VALUE), new NumericOperand(2));
+        Operation operation = new AddOperation(new NumericOperand(Integer.MAX_VALUE), new NumericOperand(1));
         expected.expect(ArithmeticException.class);
         expected.expectMessage("arithmetic overflow occurred during add operation");
         operation.evaluate();
