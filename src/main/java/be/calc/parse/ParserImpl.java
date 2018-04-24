@@ -11,11 +11,15 @@ import org.springframework.util.Assert;
 import javax.inject.Inject;
 import java.util.Optional;
 
+/**
+ * Default implementation of Parser
+ */
 @Component
 public class ParserImpl implements Parser {
 
     private static Logger logger = LoggerFactory.getLogger(ParserImpl.class);
     private OperationFactory operationFactory;
+    private static String INVALID_CALC_EXP = "Invalid calculator expression";
 
     @Inject
     public ParserImpl(OperationFactory operationFactory){
@@ -25,9 +29,11 @@ public class ParserImpl implements Parser {
     @Override
     public Operation parse(String expression) {
         Assert.notNull(expression, "Expression is required");
+        logger.info("starting parse operation with a value of {}",expression);
         expression = expression.toLowerCase().replaceAll("\\s","");
         Optional<Operation> operation = parseLetOperation(expression);
         operation = operation.isPresent() ? operation : parseArithmeticOperation(expression);
+        logger.info("ending parse operation");
         return operation.orElseThrow(() -> new IllegalArgumentException("Expression could no not be parsed"));
     }
 
@@ -46,13 +52,13 @@ public class ParserImpl implements Parser {
             //Parse Operands
             Optional<String[]> rawOperands = splitOperands(expression);
             String rawValueOperand = rawOperands.map(a -> a[0])
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid calculator expression"));
+                    .orElseThrow(this::getCalcExpressionException);
             Operand valueOperand = parseOperand(rawValueOperand);
             String replacementValue = String.valueOf(valueOperand.getValue());
             logger.debug("replacement value {}",rawValueOperand);
 
             String rawExpressionOperand = rawOperands.map(a -> a[1])
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid calculator expression"));
+                    .orElseThrow(this::getCalcExpressionException);
             logger.debug("expression before replacement {}",rawExpressionOperand);
 
             rawExpressionOperand = rawExpressionOperand.replaceAll("\\("+variableName+",","("+replacementValue+",");
@@ -74,7 +80,7 @@ public class ParserImpl implements Parser {
         if (expression.matches("^(add|sub|mult|div){1}\\(.+,.+\\)")) {
             //Operand
             String[] rawValues = expression.split("\\(",2);
-            Assert.isTrue(rawValues.length == 2,"Invalid calculator expression");
+            Assert.isTrue(rawValues.length == 2,INVALID_CALC_EXP);
             String rawOperation = rawValues[0];
             logger.debug("arithmetic operation type parsed {}",rawOperation);
 
@@ -83,8 +89,7 @@ public class ParserImpl implements Parser {
             String rawOperandExp = StringUtils.chop(rawValues[1]);
 
             Optional<String[]> operands = splitOperands(rawOperandExp);
-            String[] rawOperands = operands.orElseThrow(() ->
-                    new IllegalArgumentException("Invalid calculator expression"));
+            String[] rawOperands = operands.orElseThrow(this::getCalcExpressionException);
             logger.debug("left operand {}",rawOperands[0]);
             logger.debug("right operand {}",rawOperands[1]);
 
@@ -139,12 +144,16 @@ public class ParserImpl implements Parser {
 
         return parseLetOperation(expression).map(o -> (Operand)o).orElseGet(() ->
                 parseArithmeticOperation(expression).map(o -> (Operand)o).orElseGet(() -> {
-                    Assert.isTrue(expression.matches("^-?\\d+"),"Invalid calculator expression");
+                    Assert.isTrue(expression.matches("^-?\\d+"),INVALID_CALC_EXP);
                     Long numericValue = Long.valueOf(expression);
                     Assert.isTrue(numericValue >= Integer.MIN_VALUE && numericValue <= Integer.MAX_VALUE,
                             "Numerical operand exceeds min/max value");
                     return new NumericOperand(numericValue.intValue());
                 })
         );
+    }
+
+    private IllegalArgumentException getCalcExpressionException(){
+        return new IllegalArgumentException(INVALID_CALC_EXP);
     }
 }

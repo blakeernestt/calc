@@ -8,6 +8,9 @@ import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 
+/**
+ * Default implementation of Calculator
+ */
 @Component
 public class CalculatorImpl implements Calculator {
 
@@ -22,9 +25,9 @@ public class CalculatorImpl implements Calculator {
     @Override
     public int calculate(String expression){
         Assert.notNull(expression,"expression is required");
-        logger.debug("CalculatorImpl starting with provided input: {}", expression);
+        logger.info("calculator starting with provided input: {}", expression);
         int result = parser.parse(expression).evaluate();
-        logger.debug("CalculatorImpl expression evaluated to {}", result);
+        logger.info("calculator completed evaluating expression to {}", result);
         return result;
      }
 

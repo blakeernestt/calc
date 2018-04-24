@@ -3,6 +3,9 @@ package be.calc.arithmetic;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+/**
+ * Default implementation of OperationFactory
+ */
 @Component
 public class OperationFactoryImpl implements OperationFactory {
     @Override

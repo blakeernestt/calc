@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 
+/**
+ * Default implementation of LogLevelHandler
+ */
 @Component
 public class LogLevelHandlerImpl implements LogLevelHandler {
 
@@ -19,7 +22,7 @@ public class LogLevelHandlerImpl implements LogLevelHandler {
         changeLevel(resolveLogLevel(logLevel));
     }
 
-    //By convention logging is configured externally via a properties or xml file and not dynamically at runtime.
+    //By convention logging is configured externally via a properties or xml file rather than dynamically at runtime.
     //To support setting dynamically the Log4J API is used directly rather than the SLF4J wrapper.  It would be
     //preferable to use the wrapper only.
     private Level resolveLogLevel(String logLevel){

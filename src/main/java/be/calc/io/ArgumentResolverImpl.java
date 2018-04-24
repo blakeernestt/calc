@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Default implementation of ArgumentResolver
+ */
 @Component
 public class ArgumentResolverImpl implements ArgumentResolver {
 
